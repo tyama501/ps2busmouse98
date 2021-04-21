@@ -11,7 +11,7 @@
 #define RB PD7
 #define ERROR_NUM 3
 
-#define DEBUG
+//#define DEBUG
 
 int error_f = 0;
 int error_cnt = 0;
@@ -238,6 +238,10 @@ int receiveData(void) {
     }
   }
 
+  MsTimer2::stop();
+  error_f = 0;
+  error_cnt = 0;
+
   for (int i=0; i<8; i++) {
     data = data |(data_val[i] << i);
   }
@@ -255,10 +259,6 @@ void loop() {
   static int dataY = 0;
 
   data = receiveData();
-
-  MsTimer2::stop();
-  error_f = 0;
-  error_cnt = 0;
 
   if (data_cnt == 0) {
     if (data & 0x01) {
@@ -308,9 +308,9 @@ void loop() {
 
 #ifdef DEBUG
     Serial.print("X:");
-    Serial.print(dataX, HEX);
-    Serial.print("Y:");
-    Serial.println(dataY, HEX);
+    Serial.print(dataX);
+    Serial.print(" Y:");
+    Serial.println(dataY);
 #endif
 
     switch (stateB) {
