@@ -1,3 +1,5 @@
+//ps2busmouse98
+//PS/2 - pc-98 bus mouse converter
 #include <MsTimer2.h>
 
 #define PS2DATA A4
@@ -262,28 +264,28 @@ void loop() {
 
   if (data_cnt == 0) {
     if (data & 0x01) {
-      stateB = stateB | 0x01;
+      stateB = stateB | 0x01; // L
     }
     else {
       stateB = stateB & 0xFE;
     }
     if (data & 0x02) {
-      stateB = stateB | 0x02;
+      stateB = stateB | 0x02; // R
     }
     else {
       stateB = stateB & 0xFD;
     }
     if (data & 0x10) {
-      stateX = stateX | 0x10;
+      stateX = stateX | 0x10; // Negative X
     }
     else {
-      stateX = stateX & 0xEF;
+      stateX = stateX & 0xEF; // Positive X
     }
     if (data & 0x20) {
-      stateY = stateY | 0x20;
+      stateY = stateY | 0x20; // Negative Y
     }
     else {
-      stateY = stateY & 0xDF;
+      stateY = stateY & 0xDF; // Positive Y
     }
     data_cnt++;
   }
@@ -307,7 +309,7 @@ void loop() {
     }
 
 #ifdef DEBUG
-    Serial.print("X:");
+    Serial.print(" X:");
     Serial.print(dataX);
     Serial.print(" Y:");
     Serial.println(dataY);
@@ -331,6 +333,17 @@ void loop() {
         pinMode(RB, OUTPUT);
         break;
     }
+
+// state      0 1 3 2
+//          ___     ___
+// A pulse |   |___|   |___
+//            ___     ___
+// B pulse   |   |___|   |___
+//
+// declease <--        --> increase
+//
+// For XA,XB the increasing pulse move the cursor rightward. (Positive for PS/2)
+// For YA,YB the increasing pulse move the cursor downward. (Negative for PS/2)
 
     while (dataX) {
       switch (stateX) {
@@ -361,7 +374,7 @@ void loop() {
           break;
         case 0x12:
           stateX = 0x13;
-          pinMode(XA, INPUT);
+          pinMode(XA, OUTPUT);
           pinMode(XB, OUTPUT);
           break;
         case 0x13:
@@ -370,55 +383,55 @@ void loop() {
           pinMode(XB, INPUT);
           break;
         case 0x11:
-          stateX = 0x00;
-          pinMode(XA, OUTPUT);
-          pinMode(XB, OUTPUT);
+          stateX = 0x10;
+          pinMode(XA, INPUT);
+          pinMode(XB, INPUT);
           break;
         default:
           stateX = 0x00;
       }
       dataX--;   
-      //delayMicroseconds(5);
+      delayMicroseconds(3);
     }
 
     while (dataY) {
       switch (stateY) {
-        case 0x00:
-          stateY = 0x01;
+        case 0x20:
+          stateY = 0x21;
           pinMode(YA, OUTPUT);
           pinMode(YB, INPUT);
           break;
-        case 0x01:
-          stateY = 0x03;
+        case 0x21:
+          stateY = 0x23;
           pinMode(YA, OUTPUT);
           pinMode(YB, OUTPUT);
           break;
-        case 0x03:
+        case 0x23:
+          stateY = 0x22;
+          pinMode(YA, INPUT);
+          pinMode(YB, OUTPUT);
+          break;
+        case 0x22:
+          stateY = 0x20;
+          pinMode(YA, INPUT);
+          pinMode(YB, INPUT);
+          break;
+        case 0x00:
           stateY = 0x02;
           pinMode(YA, INPUT);
           pinMode(YB, OUTPUT);
           break;
         case 0x02:
-          stateY = 0x00;
-          pinMode(YA, INPUT);
-          pinMode(YB, INPUT);
-          break;
-        case 0x10:
-          stateY = 0x12;
-          pinMode(YA, INPUT);
-          pinMode(YB, OUTPUT);
-          break;
-        case 0x12:
-          stateY = 0x13;
+          stateY = 0x03;
           pinMode(YA, OUTPUT);
           pinMode(YB, OUTPUT);
           break;
-        case 0x13:
-          stateY = 0x11;
+        case 0x03:
+          stateY = 0x01;
           pinMode(YA, OUTPUT);
           pinMode(YB, INPUT);
           break;
-        case 0x11:
+        case 0x01:
           stateY = 0x00;
           pinMode(YA, INPUT);
           pinMode(YB, INPUT);
@@ -427,7 +440,7 @@ void loop() {
           stateY = 0x00;
       }
       dataY--;
-      //delayMicroseconds(5);
+      delayMicroseconds(3);
     }
     data_cnt = 0;
   } 
