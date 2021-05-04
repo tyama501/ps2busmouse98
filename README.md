@@ -17,7 +17,7 @@ Now it is alpha version. (a little unstable)
 - No parity checking. (alpha version)
 - No checking for acknowledge of enabling data reporting. (alpha version)
 
-## Tested Applications
+## Applications used to test the mouse
 Circuit Editor : CE Version 2.5 (tested with MOUSE.COM, LIPS.COM)  
 Driver : Microsoft Mouse Driver v7.06 (MOUSE.COM)  
 Driver : Animation Mouse Driver "Lips" Revision 0.28 (LIPS.COM)  
