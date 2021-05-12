@@ -11,7 +11,7 @@ Now it is alpha version. (a little unstable)
 <img src=ps2busmouse98_20210425.jpg width="320pix"> <img src=PS2BMOU.BMP width="320pix">
 
 - Receiving PS/2 signal after sending a code to enable data reporting.
-- Switching Hi-Z and zero output for XA/XB/YA/YB pulses and LR buttons.
+- Switching Hi-Z and zero output for XA/XB/YA/YB pulses and LR buttons.  (it seems to have distortion issue of the pulse)
 - Watchdog timer for checking irregular PS/2 signal.
 - LED for PS/2 signal receiving. (duplicated to the serial port, so always lights up if DEBUG is defined)
 - No parity checking. (alpha version)
