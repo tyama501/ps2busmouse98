@@ -12,6 +12,7 @@ Now it is alpha version. (a little unstable)
 
 - Receiving PS/2 signal after sending a code to enable data reporting.
 - Switching Hi-Z and zero output for XA/XB/YA/YB pulses and LR buttons.  (it seems to have distortion issue of the pulse)
+- Limiter for the movement. (the maximum movement is limited to 20 per 10ms due to the slow output pulse) 
 - Watchdog timer for checking irregular PS/2 signal.
 - LED for PS/2 signal receiving. (duplicated to the serial port, so always lights up if DEBUG is defined)
 - No parity checking. (alpha version)
