@@ -12,6 +12,7 @@
 #define LB PD6
 #define RB PD7
 #define ERROR_NUM 3
+#define MAX_MOVE 20
 
 //#define DEBUG
 
@@ -170,6 +171,8 @@ int receiveData(void) {
     delayMicroseconds(5);
   }
 
+  error_f = 0;
+  error_cnt = 0;
   MsTimer2::start();
 
   // Data
@@ -241,8 +244,8 @@ int receiveData(void) {
   }
 
   MsTimer2::stop();
-  error_f = 0;
-  error_cnt = 0;
+  //error_f = 0;
+  //error_cnt = 0;
 
   for (int i=0; i<8; i++) {
     data = data |(data_val[i] << i);
@@ -257,6 +260,7 @@ void loop() {
   static int stateX = 0;
   static int stateY = 0;
   static int stateB = 0;
+  static int stateBprevious = 0;
   static int dataX = 0;
   static int dataY = 0;
 
@@ -309,12 +313,34 @@ void loop() {
     }
 
 #ifdef DEBUG
-    Serial.print(" X:");
     Serial.print(dataX);
-    Serial.print(" Y:");
+    Serial.print(":");
     Serial.println(dataY);
 #endif
 
+// Limiter
+    if (error_f) {
+      stateB = stateBprevious;
+    }
+    else {
+      stateBprevious = stateB;
+    }
+
+    if (error_f) {
+      dataX = 0;
+    }
+    else if (dataX > MAX_MOVE) {
+      dataX = MAX_MOVE;
+    }
+
+    if (error_f) {
+      dataY = 0;
+    }
+    else if (dataY > MAX_MOVE) {
+      dataY = MAX_MOVE;
+    }
+
+// Button
     switch (stateB) {
       case 0x00:
         pinMode(LB, INPUT);
@@ -334,6 +360,7 @@ void loop() {
         break;
     }
 
+// Cursor
 // state      0 1 3 2
 //          ___     ___
 // A pulse |   |___|   |___
@@ -390,8 +417,9 @@ void loop() {
         default:
           stateX = 0x00;
       }
-      dataX--;   
-      delayMicroseconds(3);
+      dataX--;
+      delayMicroseconds(150);
+      //delayMicroseconds(3);
     }
 
     while (dataY) {
@@ -440,7 +468,8 @@ void loop() {
           stateY = 0x00;
       }
       dataY--;
-      delayMicroseconds(3);
+      delayMicroseconds(150);
+      //delayMicroseconds(3);
     }
     data_cnt = 0;
   } 
