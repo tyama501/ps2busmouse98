@@ -18,8 +18,14 @@ Now it is alpha version. (a little unstable)
 - No parity checking. (alpha version)
 - No checking for acknowledge of enabling data reporting. (alpha version)
 
+## PC used to test the mouse
+PC-9801RX21  
+  
 ## Applications used to test the mouse
+Game : Brandish  
+  
 Circuit Editor : CE Version 2.5 (tested with MOUSE.COM, LIPS.COM)  
+  
 Driver : Microsoft Mouse Driver v7.06 (MOUSE.COM)  
 Driver : Animation Mouse Driver "Lips" Revision 0.28 (LIPS.COM)  
 Driver : OZMOUSE Original Mouse Driver Version 0.04C (OZMOUSE.COM)  
