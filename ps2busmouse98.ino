@@ -47,6 +47,10 @@ void sendData(char tdata) {
   delayMicroseconds(200);
   pinMode(PS2CLK, INPUT);
 
+  error_f = 0;
+  error_cnt = 0;
+  MsTimer2::start();
+
   // Data
   for (int i=0; i<8; i++) {
     clk_val = digitalRead(PS2CLK);
@@ -132,9 +136,13 @@ void sendData(char tdata) {
       break;
     }
   }
+
+  MsTimer2::stop();
+
 }
 
 void setup() {
+  int data = 0;
 #ifdef DEBUG
   Serial.begin(9600);
 #endif
@@ -154,7 +162,19 @@ void setup() {
   digitalWrite(LB, LOW);
   digitalWrite(RB, LOW);
   MsTimer2::set(1, watchdog);
-  sendData(0xF4);
+
+  // Enable data reporting
+  // Repeat if no acknowledge
+  do {
+    sendData(0xF4);
+    if (!error_f) {
+      data = receiveData();
+#ifdef DEBUG
+    Serial.println(data, HEX);
+#endif
+    }
+  } while (data != 0xFA);
+
   delay(10);
 }
 
