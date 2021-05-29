@@ -169,6 +169,7 @@ void setup() {
   // Enable data reporting
   // Repeat if no acknowledge
   do {
+    delay(5);
     sendData(0xF4);
     if (!error_f) {
       data = receiveData();
