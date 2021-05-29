@@ -15,8 +15,8 @@ Now it is alpha version. (a little unstable)
 - Limiter for the movement. (the maximum movement is limited to 20 per 10ms due to the slow output pulse) 
 - Watchdog timer for checking irregular PS/2 signal.
 - LED for PS/2 signal receiving. (duplicated to the serial port, so always lights up if DEBUG is defined)
+- Checking for acknowledge of enabling data reporting.
 - No parity checking. (alpha version)
-- No checking for acknowledge of enabling data reporting. (alpha version)
 
 ## PC used to test the mouse
 PC-9801RX21  
