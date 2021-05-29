@@ -23,9 +23,6 @@ void watchdog() {
   if (error_cnt >= ERROR_NUM) {
     error_f = 1;
     error_cnt = 0;
-#ifdef DEBUG
-    Serial.println("Watch Dog Error!");
-#endif
   }
   else {
     error_cnt++;
@@ -139,6 +136,12 @@ void sendData(char tdata) {
 
   MsTimer2::stop();
 
+#ifdef DEBUG
+  if (error_f) {
+    Serial.println("Watch Dog Error!");
+  }
+#endif
+
 }
 
 void setup() {
@@ -175,7 +178,7 @@ void setup() {
     }
   } while (data != 0xFA);
 
-  delay(10);
+  //delay(10);
 }
 
 int receiveData(void) {
@@ -266,6 +269,12 @@ int receiveData(void) {
   MsTimer2::stop();
   //error_f = 0;
   //error_cnt = 0;
+
+#ifdef DEBUG
+  if (error_f) {
+    Serial.println("Watch Dog Error!");
+  }
+#endif
 
   for (int i=0; i<8; i++) {
     data = data |(data_val[i] << i);
