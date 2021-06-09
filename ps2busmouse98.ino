@@ -18,6 +18,8 @@
 
 int error_f = 0;
 int error_cnt = 0;
+int error_watchdog = 0;
+int error_parity = 0;
 
 void watchdog() {
   if (error_cnt >= ERROR_NUM) {
@@ -217,6 +219,7 @@ int receiveData(void) {
       }
     }
     data_val[i] = digitalRead(PS2DATA);
+    parity = parity ^ data_val[i];
   }
 
   // Parity
@@ -235,7 +238,7 @@ int receiveData(void) {
       break;
     }
   }
-  parity = digitalRead(PS2DATA);
+  parity = parity ^ digitalRead(PS2DATA); // odd parity
   digitalWrite(LED, HIGH);
   delayMicroseconds(5);
   digitalWrite(LED, LOW);
@@ -271,11 +274,19 @@ int receiveData(void) {
   //error_f = 0;
   //error_cnt = 0;
 
-#ifdef DEBUG
   if (error_f) {
+    error_watchdog = 1;
+#ifdef DEBUG
     Serial.println("Watch Dog Error!");
-  }
 #endif
+  }
+
+  if (!parity) {
+    error_parity = 1;
+#ifdef DEBUG
+    Serial.println("Parity Error!");
+#endif
+  }
 
   for (int i=0; i<8; i++) {
     data = data |(data_val[i] << i);
@@ -349,26 +360,29 @@ void loop() {
 #endif
 
 // Limiter
-    if (error_f) {
+    if (error_watchdog || error_parity) {
       stateB = stateBprevious;
     }
     else {
       stateBprevious = stateB;
     }
 
-    if (error_f) {
+    if (error_watchdog || error_parity) {
       dataX = 0;
     }
     else if (dataX > MAX_MOVE) {
       dataX = MAX_MOVE;
     }
 
-    if (error_f) {
+    if (error_watchdog || error_parity) {
       dataY = 0;
     }
     else if (dataY > MAX_MOVE) {
       dataY = MAX_MOVE;
     }
+
+    error_watchdog = 0;
+    error_parity = 0;
 
 // Button
     switch (stateB) {
