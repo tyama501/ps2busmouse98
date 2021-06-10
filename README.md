@@ -3,10 +3,10 @@
 
 秋月電子通商で販売されているArduino互換ボード(AE-ATMEGA328-MINI)を用いて作成した  
 PS/2マウスをpc-9801用バスマウスに変換する変換器です。  
-現状Alpha版という位置付けです。(少し不安定)
+現状Beta版という位置付けです。
 
 This is a converter to convert PS/2 mouse to pc-9801 bus mouse using Arduino compatible board (AE-ATMEGA328-MINI) sold in Akizukidenshi, Japan.  
-Now it is alpha version. (a little unstable)  
+Now it is beta version.
 
 <img src=ps2busmouse98_20210425.jpg width="320pix"> <img src=PS2BMOU.BMP width="320pix">
 
@@ -16,10 +16,11 @@ Now it is alpha version. (a little unstable)
 - Watchdog timer for checking irregular PS/2 signal.
 - LED for PS/2 signal receiving. (duplicated to the serial port, so always lights up if DEBUG is defined)
 - Checking for acknowledge of enabling data reporting.
-- No parity checking. (alpha version)
+- Parity checking.  
 
 ## PC used to test the mouse
 PC-9801RX21  
+PC-9801UV21  
   
 ## Applications used to test the mouse
 Game : Brandish  
