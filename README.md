@@ -32,7 +32,7 @@ Driver : Animation Mouse Driver "Lips" Revision 0.28 (LIPS.COM)
 Driver : OZMOUSE Original Mouse Driver Version 0.04C (OZMOUSE.COM)  
 
 ## See Also
-For initialization of PS/2 mouse containing USB-and-PS/2 compatible controller chip
+For initialization of PS/2 mouse containing USB-and-PS/2 compatible controller chip  
 https://github.com/barbeque/busmouse98-byou
 
 ## References
